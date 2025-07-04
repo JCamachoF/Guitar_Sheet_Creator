@@ -1,0 +1,21 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.GuitarSheetCreator" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryVariant</item>         <!-- Azul más oscuro -->
+        <item name="colorOnPrimary">@color/white</item>                    <!-- Texto sobre azul -->
+
+        <item name="colorSecondary">@color/colorSecondaryVariant</item>    <!-- Azul gris más oscuro -->
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="android:colorBackground">@color/black</item>           <!-- Fondo general -->
+        <item name="colorSurface">@color/black</item>                      <!-- Tarjetas, paneles -->
+        <item name="colorOnSurface">@color/white</item>                    <!-- Texto sobre superficie -->
+        <item name="colorOnBackground">@color/white</item>
+
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/onError</item>
+    </style>
+
+    <style name="Theme.GuitarSheetCreator" parent="Base.Theme.GuitarSheetCreator" />
+
+</resources>

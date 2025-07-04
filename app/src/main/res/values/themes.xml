@@ -1,0 +1,31 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.GuitarSheetCreator" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/onSurface</item>
+        <item name="colorOnBackground">@color/onBackground</item>
+
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/onError</item>
+
+
+    </style>
+
+    <style name="Theme.GuitarSheetCreator" parent="Base.Theme.GuitarSheetCreator" />
+
+    <style name="Widget.GuitarSheetCreator.FAB" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="rippleColor">@color/colorSecondary</item>
+        <item name="elevation">6dp</item>
+
+    </style>
+</resources>

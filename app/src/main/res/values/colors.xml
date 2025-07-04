@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Básicos -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+    <!-- Colores Primarios (Azules) -->
+    <color name="colorPrimary">#1368BC</color>            <!-- Azul principal -->
+    <color name="colorPrimaryVariant">#0D47A1</color>     <!-- Azul oscuro -->
+    <color name="colorOnPrimary">#FFFFFF</color>          <!-- Texto sobre primario -->
+
+    <!-- Colores Secundarios (Azul grisáceo) -->
+    <color name="colorSecondary">#90CAF9</color>          <!-- Azul claro -->
+    <color name="colorSecondaryVariant">#64B5F6</color>   <!-- Variante secundaria -->
+    <color name="colorOnSecondary">#FFFFFF</color>
+
+    <!-- Fondo y superficie -->
+    <color name="background">#F5F9FF</color>              <!-- Fondo general (blanco azulado) -->
+    <color name="surface">#FFFFFF</color>                 <!-- Superficies (tarjetas, paneles) -->
+    <color name="onBackground">#1A237E</color>            <!-- Texto sobre fondo -->
+    <color name="onSurface">#0D47A1</color>               <!-- Texto sobre superficie -->
+
+    <!-- Error y estados (opcional) -->
+    <color name="error">#D32F2F</color>
+    <color name="onError">#FFFFFF</color>
+</resources>
