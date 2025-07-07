@@ -11,7 +11,7 @@ import com.daza.guitarsheetcreator.activities.models.TablatureBar
 class TabBarAdapterEdit(
     private val bars: List<TablatureBar>,
     private val onStringClicked: (barIndex: Int, stringName: String) -> Unit,
-    private val showPositionGuide: Boolean = true // nuevo parámetro opcional
+
 ) : RecyclerView.Adapter<TabBarAdapterEdit.TabBarViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TabBarViewHolder {
@@ -41,13 +41,6 @@ class TabBarAdapterEdit(
                 "p" to itemView.findViewById<TextView>(R.id.compas_position)
 
             )
-
-            val positionTextView = strings["p"]
-            if (!showPositionGuide) {
-                positionTextView?.visibility = View.GONE
-            }
-
-
 
 
             for ((name, view) in strings) {

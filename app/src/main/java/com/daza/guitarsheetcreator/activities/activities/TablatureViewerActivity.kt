@@ -68,22 +68,38 @@ class TablatureViewerActivity : AppCompatActivity() {
                 if (song != null) {
                     val bars = parseTablature(song.tablature)
                     val isLandscape = resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
-
-                    if (isLandscape) {
-                        // Mostrar 2 compases por fila (modo horizontal)
-                        val groupedBars = groupBarsIntoRows(bars, barsPerRow = 2)
-                        recyclerView.adapter = TablatureRowAdapter(groupedBars)
-                    } else {
-                        // Mostrar un compás por ítem (modo vertical)
-
-                        recyclerView.adapter = TabBarAdapterEdit(
-                            bars,
-                            onStringClicked = { _, _ -> },
-                            showPositionGuide = false // oculta guía si vienes del viewer
-                        )
+                    val isTablet = resources.configuration.smallestScreenWidthDp >= 600
 
 
+
+                    if (!isTablet) {
+                        if (isLandscape) {
+                            // Mostrar 2 compases por fila (modo horizontal)
+                            val groupedBars = groupBarsIntoRows(bars, barsPerRow = 2)
+                            recyclerView.adapter = TablatureRowAdapter(groupedBars)
+                        } else {
+                            // Mostrar un compás por ítem (modo vertical)
+
+                            val groupedBars = groupBarsIntoRows(bars, barsPerRow = 1)
+                            recyclerView.adapter = TablatureRowAdapter(groupedBars)
+
+                        }
+                    }else {
+                        if (isLandscape) {
+                            // Mostrar 2 compases por fila (modo horizontal)
+                            val groupedBars = groupBarsIntoRows(bars, barsPerRow = 4)
+                            recyclerView.adapter = TablatureRowAdapter(groupedBars)
+                        } else {
+                            // Mostrar un compás por ítem (modo vertical)
+                            val groupedBars = groupBarsIntoRows(bars, barsPerRow = 3)
+                            recyclerView.adapter = TablatureRowAdapter(groupedBars)
+
+
+
+                        }
                     }
+
+
 
                 } else {
                     Toast.makeText(this@TablatureViewerActivity, "Canción no encontrada", Toast.LENGTH_SHORT).show()

@@ -56,7 +56,7 @@ class TabEditorBarsFragment : Fragment() {
             onStringClicked = { barIndex, string ->
                 (activity as? TabEditorActivity)?.showFretNumbers(barIndex, string)
             },
-            showPositionGuide = true // ✅ Se muestra la guía de posición
+
         )
 
         recyclerView.adapter = adapter

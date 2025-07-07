@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
-            
+
             <EditText
                 android:id="@+id/editTextTitle"
                 android:layout_width="match_parent"
