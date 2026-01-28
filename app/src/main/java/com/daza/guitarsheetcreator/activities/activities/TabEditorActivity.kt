@@ -62,6 +62,9 @@ class TabEditorActivity : AppCompatActivity() {
             guardarTablatura()
         }
 
+        controlsFragment.setOnUndoListener {
+            deshacerUltimaAccion()
+        }
     }
 
     private fun guardarTablatura() {
@@ -104,11 +107,19 @@ class TabEditorActivity : AppCompatActivity() {
     fun showFretNumbers(barIndex: Int, string: String) {
 
         controlsFragment.startFretSelection(barIndex, string) { selectedFret, selectedPosition ->
-            // Ya no mostramos diálogos, aplicamos directamente la modificación
-            barsFragment.updateFretAt(barIndex, string, selectedFret, selectedPosition)
+
+            if (selectedFret == "|") {
+                barsFragment.updateBarSeparatorAt(barIndex, selectedPosition)
+            } else {
+                barsFragment.updateFretAt(
+                    barIndex,
+                    string,
+                    selectedFret,
+                    selectedPosition
+                )
+            }
         }
     }
-
 
     // Este método se llama automáticamente antes de que Android
     //  destruya tu actividad (como al girar la pantalla).
@@ -117,4 +128,40 @@ class TabEditorActivity : AppCompatActivity() {
         outState.putInt("song_id", songId)
     }
 
+    private fun deshacerUltimaAccion() {
+        val action = controlsFragment.undoLastAction()
+
+        if (action == null) {
+            Toast.makeText(
+                this,
+                "No hay cambios para deshacer",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        when (action) {
+
+            is TabEditorControlsFragment.EditorAction.FretAction -> {
+                if (action.fret == "|" && action.string == "ALL") {
+                    barsFragment.undoBarSeparator(
+                        barIndex = action.barIndex,
+                        position = action.position)
+                } else {
+                    barsFragment.clearFretAt(
+                        barIndex = action.barIndex,
+                        string = action.string,
+                        position = action.position
+                    )
+                }
+            }
+
+            is TabEditorControlsFragment.EditorAction.AddBarAction -> {
+                barsFragment.removeLastBar()
+            }
+        }
+    }
+    fun getBarsCount(): Int {
+        return barsFragment.bars.size
+    }
 }

@@ -67,7 +67,8 @@ class TablatureViewerActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 if (song != null) {
                     val bars = parseTablature(song.tablature)
-                    val isLandscape = resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+                    val isLandscape = resources.configuration.orientation == android.content.res.
+                    Configuration.ORIENTATION_LANDSCAPE
                     val isTablet = resources.configuration.smallestScreenWidthDp >= 600
 
 
@@ -183,7 +184,7 @@ class TablatureViewerActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveSongAsPdf(uri: Uri, song: Song) {
+    /*private fun saveSongAsPdf(uri: Uri, song: Song) {
         val bars = parseTablature(song.tablature)
 
         val pdfDocument = PdfDocument()
@@ -224,6 +225,97 @@ class TablatureViewerActivity : AppCompatActivity() {
             }
             canvas.drawText(line, marginLeft, yPosition.toFloat(), paint)
             yPosition += lineHeight
+        }
+
+        pdfDocument.finishPage(page)
+
+        try {
+            contentResolver.openOutputStream(uri)?.use { output ->
+                pdfDocument.writeTo(output)
+            }
+            Toast.makeText(this, "PDF guardado correctamente", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Error al guardar PDF", Toast.LENGTH_SHORT).show()
+        } finally {
+            pdfDocument.close()
+        }
+    }*/
+
+
+    private fun saveSongAsPdf(uri: Uri, song: Song) {
+        val bars = parseTablature(song.tablature)
+
+        val pdfDocument = PdfDocument()
+        val paint = Paint().apply {
+            textSize = 12f
+            typeface = Typeface.MONOSPACE
+        }
+
+        val pageWidth = 595
+        val pageHeight = 842
+        val lineHeight = 18
+        val marginLeft = 40f
+        val marginRight = 40f
+        val contentWidth = pageWidth - marginLeft - marginRight
+
+        val maxCharsPerLine = (contentWidth / paint.measureText("-")).toInt()
+        val lines = buildLinearTablature(bars, maxCharsPerLine)
+
+        var yPosition = 60f
+        var currentPageNumber = 1
+
+        var page = pdfDocument.startPage(
+            PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPageNumber).create()
+        )
+        val canvas = page.canvas
+
+        // Dibujar título
+        paint.textSize = 16f
+        canvas.drawText("Título: ${song.title}", marginLeft, yPosition, paint)
+        yPosition += 30f
+        paint.textSize = 12f
+
+        val stringSpacing = lineHeight.toFloat()
+        val totalStrings = 6  // número de cuerdas
+
+        var lineIndex = 0
+        while (lineIndex < lines.size) {
+            // Cambiar página si es necesario
+            if (yPosition + stringSpacing * totalStrings > pageHeight - 40) {
+                pdfDocument.finishPage(page)
+                currentPageNumber++
+                page = pdfDocument.startPage(
+                    PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPageNumber).create()
+                )
+                yPosition = 60f
+            }
+
+            // Tomar bloque de 6 líneas (6 cuerdas)
+            val currentBlock = lines.subList(lineIndex, minOf(lineIndex + 6, lines.size))
+            val maxLength = currentBlock.maxOf { it.length }
+
+            for (charIndex in 0 until maxLength) {
+                for ((stringIdx, stringLine) in currentBlock.withIndex()) {
+                    val x = marginLeft + charIndex * paint.measureText("-")
+                    val y = yPosition + stringIdx * stringSpacing
+
+                    val c = if (charIndex < stringLine.length) stringLine[charIndex] else ' '
+
+                    if (c == '|') {
+                        // Dibujar línea vertical atravesando las 6 cuerdas
+                        val topY = yPosition
+                        val bottomY = yPosition + stringSpacing * (totalStrings - 1)
+                        val lineX = x + paint.measureText("|") / 2
+                        canvas.drawLine(lineX, topY, lineX, bottomY, paint)
+                    } else {
+                        canvas.drawText(c.toString(), x, y, paint)
+                    }
+                }
+            }
+
+            yPosition += stringSpacing * totalStrings + 10  // espacio entre bloques
+            lineIndex += 7  // 6 cuerdas + 1 línea vacía
         }
 
         pdfDocument.finishPage(page)

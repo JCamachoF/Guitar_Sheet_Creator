@@ -5,7 +5,7 @@
     <color name="black">#FF000000</color>
 
     <!-- Colores Primarios (Azules) -->
-    <color name="colorPrimary">#1368BC</color>            <!-- Azul principal -->
+    <color name="colorPrimary">#084C90</color>            <!-- Azul principal -->
     <color name="colorPrimaryVariant">#0D47A1</color>     <!-- Azul oscuro -->
     <color name="colorOnPrimary">#FFFFFF</color>          <!-- Texto sobre primario -->
 

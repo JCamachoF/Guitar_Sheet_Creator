@@ -153,4 +153,79 @@ class TabEditorBarsFragment : Fragment() {
         adapter.notifyItemChanged(barIndex)
     }
 
+    fun clearFretAt(barIndex: Int, string: String, position: Int) {
+        val bar = bars[barIndex]
+
+        when (string) {
+            "e" -> bar.highE[position] = "---"
+            "A" -> bar.A[position] = "---"
+            "D" -> bar.D[position] = "---"
+            "G" -> bar.G[position] = "---"
+            "B" -> bar.B[position] = "---"
+            "E" -> bar.lowE[position] = "---"
+        }
+
+        adapter.notifyItemChanged(barIndex)
+    }
+
+    fun updateBarSeparatorAt(barIndex: Int, position: Int) {
+        val bar = bars[barIndex]
+
+        // Asegura que todas las cuerdas tengan tamaño suficiente
+        fun ensureSize(list: MutableList<String>, pos: Int) {
+            while (list.size <= pos) {
+                list.add("---")
+            }
+        }
+
+        val separator = "-|-"   // mismo ancho que un traste (3 chars)
+
+        ensureSize(bar.highE, position)
+        ensureSize(bar.B, position)
+        ensureSize(bar.G, position)
+        ensureSize(bar.D, position)
+        ensureSize(bar.A, position)
+        ensureSize(bar.lowE, position)
+
+        bar.highE[position] = separator
+        bar.B[position] = separator
+        bar.G[position] = separator
+        bar.D[position] = separator
+        bar.A[position] = separator
+        bar.lowE[position] = separator
+
+        adapter.notifyItemChanged(barIndex)
+    }
+
+
+    fun undoBarSeparator(barIndex: Int, position: Int) {
+        val bar = bars.getOrNull(barIndex) ?: return
+
+        fun clearAt(list: MutableList<String>) {
+            if (position in list.indices) {
+                list[position] = "---"
+            }
+        }
+
+        clearAt(bar.highE)
+        clearAt(bar.B)
+        clearAt(bar.G)
+        clearAt(bar.D)
+        clearAt(bar.A)
+        clearAt(bar.lowE)
+
+        adapter.notifyItemChanged(barIndex)
+    }
+
+
+    fun removeLastBar() {
+        if (bars.isEmpty()) return
+
+        val lastIndex = bars.lastIndex
+        bars.removeAt(lastIndex)
+        adapter.notifyItemRemoved(lastIndex)
+    }
+
+
+
 }
