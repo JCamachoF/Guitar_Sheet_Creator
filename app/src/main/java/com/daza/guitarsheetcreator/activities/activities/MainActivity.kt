@@ -4,13 +4,9 @@ package com.daza.guitarsheetcreator.activities.activities
 import android.content.Intent
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
-
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -43,6 +39,30 @@ class MainActivity : AppCompatActivity() {
     private lateinit var db: AppDatabase
 
     private lateinit var toolbar: Toolbar
+
+    private val createBackupFile =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            uri?.let {
+                lifecycleScope.launch {
+                    val repository = Backup(this@MainActivity, db.songDao())
+                    val songs = db.songDao().getAllSongs()
+                    repository.exportBackup(it, songs)
+                }
+            }
+        }
+
+    private val pickBackupFile =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let {
+                lifecycleScope.launch {
+                    val repository = Backup(this@MainActivity, db.songDao())
+                    repository.restoreBackup(it)
+                    loadSongs()
+                }
+            }
+        }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -177,68 +197,12 @@ class MainActivity : AppCompatActivity() {
     }*/
 
     private fun restoreDataFromCel() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val repository = Backup(this@MainActivity, db.songDao())
-                repository.restoreDatabase( this@MainActivity)
+        pickBackupFile.launch(arrayOf("application/json"))
 
-                withContext(Dispatchers.Main) {
-                    loadSongs()
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-
-            }
-        }
     }
 
     private fun backupDatabase() {
-        lifecycleScope.launch {
-            val repository = Backup(this@MainActivity, db.songDao())
-            val existingUri = repository.backupExists()
-
-            if (existingUri != null) {
-                AlertDialog.Builder(this@MainActivity)
-                    .setTitle("Copia de seguridad existente")
-                    .setMessage("Ya existe una copia en la  carpeta Download. ¿Deseas reemplazarla?")
-                    .setPositiveButton("Reemplazar") { _, _ ->
-                        lifecycleScope.launch {
-                            repository.deleteBackup(existingUri)
-                            saveBackup(repository)
-                        }
-                    }
-                    .setNegativeButton("Cancelar", null)
-                    .show()
-            } else {
-
-                AlertDialog.Builder(this@MainActivity)
-                    .setTitle("Guardar copia de seguridad")
-                    .setMessage("La copia se guardará en la carpeta Download")
-                    .setPositiveButton("Guardar") { _, _ ->
-                        lifecycleScope.launch {
-                            saveBackup(repository)
-                        }
-                    }
-                    .setNegativeButton("Cancelar", null)
-                    .show()
-
-            }
-        }
-    }
-
-//funcion auxiliar para guardar
-    private suspend fun saveBackup(repository: Backup) {
-        withContext(Dispatchers.IO) {
-            val songs = db.songDao().getAllSongs()
-            repository.backupToDownloads(this@MainActivity, songs)
-        }
-
-        Toast.makeText(
-            this@MainActivity,
-            "Respaldo guardado en Descargas",
-            Toast.LENGTH_SHORT
-        ).show()
+        createBackupFile.launch("GuitarSheet Backup.json")
     }
 
 
@@ -250,10 +214,6 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
-
-
-
-
 
 
 
