@@ -102,7 +102,9 @@ class TabEditorControlsFragment : Fragment() {
     private var currentBarIndex: Int = -1
     private var currentFret: String? = null
 
-    fun startFretSelection(barIndex: Int, string: String, onComplete: (String, Int) -> Unit) {
+    //para este punto ya debemos enviar el numero de traste y la posición en el sextagrama
+
+    fun startFretSelection(barIndex: Int, string: String, pos1: Int, onComplete: (String, Int) -> Unit) {
         currentBarIndex = barIndex
         currentString = string
         currentFret = null
@@ -152,9 +154,26 @@ class TabEditorControlsFragment : Fragment() {
                 setOnClickListener {
                     currentFret = traste
                     if (traste == "|") {
-                        showGlobalPositionSelection(instruccionTextView)
+                        actionHistory.add(
+                            EditorAction.FretAction(
+                                barIndex = currentBarIndex,
+                                string = "ALL",
+                                fret = "|",
+                                position = pos1
+                            )
+                        )
+                        currentFretSelectionCallback?.invoke("|", pos1)
                     } else {
-                        showPositionSelection(instruccionTextView, traste)
+
+                        actionHistory.add(
+                            EditorAction.FretAction(
+                                barIndex = currentBarIndex,
+                                string = currentString,
+                                fret = traste,
+                                position = pos1
+                            )
+                        )
+                        currentFretSelectionCallback?.invoke(traste, pos1)
                     }
                 }
             }
@@ -178,42 +197,6 @@ class TabEditorControlsFragment : Fragment() {
 
         containerDynamicButtons.addView(cancelButton)
 
-    }
-
-    private fun showPositionSelection(textView: TextView, fret: String) {
-        textView.text = "Selecciona la posición del compás para la cuerda $currentString (traste $fret)"
-        gridTrastes.removeAllViews()
-
-        val posiciones = (1..10).toList()
-
-        for (pos in posiciones) {
-            val posButton = Button(requireContext()).apply {
-                text = pos.toString()
-                isAllCaps = false
-                layoutParams = GridLayout.LayoutParams().apply {
-                    width = 0
-                    height = GridLayout.LayoutParams.WRAP_CONTENT
-                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                    setMargins(8, 8, 8, 8)
-                }
-                setOnClickListener {
-                    // Guardamos acción
-                    actionHistory.add(
-                        EditorAction.FretAction(
-                            barIndex = currentBarIndex,
-                            string = currentString,
-                            fret = fret,
-                            position = pos - 1
-                        )
-                    )
-
-                    currentFretSelectionCallback?.invoke(fret, pos - 1)
-                    clearFretSelectionUI()
-                }
-
-            }
-            gridTrastes.addView(posButton)
-        }
     }
 
     private fun clearFretSelectionUI() {

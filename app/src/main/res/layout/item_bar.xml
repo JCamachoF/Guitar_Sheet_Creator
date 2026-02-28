@@ -4,55 +4,137 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/compas_position"
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:fontFamily="monospace"
-        android:textSize="14sp" />
+        android:layout_height="40dp">
 
+        <TextView
+            android:text="e|"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:typeface="monospace"/>
 
-    <TextView
-        android:id="@+id/textViewe"
+        <LinearLayout
+            android:id="@+id/row_e"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:fontFamily="monospace"
-        android:textSize="14sp" />
+        android:layout_height="40dp">
 
-    <TextView
-        android:id="@+id/textViewB"
+        <TextView
+            android:text="B|"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:typeface="monospace"/>
+
+        <LinearLayout
+            android:id="@+id/row_B"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:fontFamily="monospace"
-        android:textSize="14sp" />
+        android:layout_height="40dp">
 
-    <TextView
-        android:id="@+id/textViewG"
+        <TextView
+            android:text="G|"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:typeface="monospace"/>
+
+        <LinearLayout
+            android:id="@+id/row_G"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:fontFamily="monospace"
-        android:textSize="14sp" />
+        android:layout_height="40dp">
 
-    <TextView
-        android:id="@+id/textViewD"
+        <TextView
+            android:text="D|"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:typeface="monospace"/>
+
+        <LinearLayout
+            android:id="@+id/row_D"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:fontFamily="monospace"
-        android:textSize="14sp" />
+        android:layout_height="40dp">
 
-    <TextView
-        android:id="@+id/textViewA"
+        <TextView
+            android:text="A|"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:typeface="monospace"/>
+
+        <LinearLayout
+            android:id="@+id/row_A"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:fontFamily="monospace"
-        android:textSize="14sp" />
+        android:layout_height="40dp">
 
-    <TextView
-        android:id="@+id/textViewE"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:fontFamily="monospace"
-        android:textSize="14sp" />
+        <TextView
+            android:text="E|"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:typeface="monospace"/>
 
+        <LinearLayout
+            android:id="@+id/row_E"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
 
 </LinearLayout>

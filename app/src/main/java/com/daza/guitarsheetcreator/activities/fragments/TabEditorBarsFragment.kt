@@ -1,6 +1,7 @@
 package com.daza.guitarsheetcreator.activities.fragments
 
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.daza.guitarsheetcreator.R
 import com.daza.guitarsheetcreator.activities.activities.TabEditorActivity
-import com.daza.guitarsheetcreator.activities.adapters.TabBarAdapterEdit
+import com.daza.guitarsheetcreator.activities.adapters.TabBarEditorAdapter
 import com.daza.guitarsheetcreator.activities.dataBase.AppDatabase
 import com.daza.guitarsheetcreator.activities.models.TablatureBar
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +25,30 @@ import kotlinx.coroutines.withContext
  */
 class TabEditorBarsFragment : Fragment() {
 
-    lateinit var adapter: TabBarAdapterEdit
+    //Contiene lista bars
+    //
+    //Tiene el adapter
+    //
+    //Convierte entre texto y modelo
+    //
+    //Es el que realmente dibuja la tablatura.
+
+    lateinit var adapter: TabBarEditorAdapter
     val bars = mutableListOf<TablatureBar>()
+    //Cada TablatureBar tiene 6 listas:
+    //highE
+    //B
+    //G
+    //D
+    //A
+    //lowE
+
+    /*Cada elemento de esas listas representa un traste formateado a 3 caracteres:
+
+    Ejemplos:
+    "---"
+    "-5-"
+    "-|-“*/
     private var songId: Int = -1
 
     companion object {
@@ -50,19 +73,16 @@ class TabEditorBarsFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewBars)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // Inicializa el adapter con una lista vacía
-        adapter = TabBarAdapterEdit(
-            bars,
-            onStringClicked = { barIndex, string ->
-                (activity as? TabEditorActivity)?.showFretNumbers(barIndex, string)
-            },
+        //aca pasamos el numero de fila (cuerda) y columna (posición)
+        adapter = TabBarEditorAdapter(bars, onCellClicked = { barIndex, stringName, position ->
+            (activity as? TabEditorActivity)?.showFretNumbers(barIndex, stringName, position)
+            //Cuando el usuario toca una cuerda se llama a controlsFragment.startFretSelection(...)
+            // en Tab Editor Activity
+        }   )
 
-        )
 
         recyclerView.adapter = adapter
 
-        // Vaciar lista primero
-        bars.clear()
 
         if (songId != -1) {
             // Cargar desde base de datos
@@ -94,6 +114,13 @@ class TabEditorBarsFragment : Fragment() {
 
     // Aquí el método para parsear la tablatura de String a lista de TablatureBar
     fun parseTablature(tablatureText: String): List<TablatureBar> {
+        //Divide en líneas:
+        //
+        //val lines = tablatureText.lines()
+        //
+        //Y cada 6 líneas forma un compás:
+        //
+        //for (i in lines.indices step 6)
         val bars = mutableListOf<TablatureBar>()
         val lines = tablatureText.lines().filter { it.isNotBlank() }
 
@@ -101,6 +128,7 @@ class TabEditorBarsFragment : Fragment() {
             if (i + 5 >= lines.size) break
 
             val bar = TablatureBar().apply {
+                //Divide cada línea en bloques de 3 caracteres. chunked(3)
                 highE.clear()
                 highE.addAll(lines[i].removePrefix("e|").chunked(3))
                 B.clear()
@@ -119,7 +147,7 @@ class TabEditorBarsFragment : Fragment() {
         return bars
     }
 
-    // Método para construir el string de tablatura desde la lista de TablatureBar
+    // Método para convertir a string desde la lista de TablatureBar
     fun buildTabString(bars: List<TablatureBar>): String {
         return bars.joinToString("\n\n") { bar ->
             listOf(
@@ -134,6 +162,22 @@ class TabEditorBarsFragment : Fragment() {
     }
 
     fun updateFretAt(barIndex: Int, string: String, fret: String, position: Int) {
+        //Asegura que la lista tenga tamaño suficiente
+        //Inserta traste formateado:
+        //barIndex → el índice del compás que queremos modificar en la lista bars.
+        //
+        //string → la cuerda que queremos actualizar (e, B, G, D, A, E).
+        //
+        //fret → el número de traste que vamos a colocar en esa cuerda (por ejemplo "3").
+        //
+        //position → la posición dentro de la cuerda donde se colocará el traste
+        // (para mantener alineadas las notas en la tablatura).
+
+
+
+        //bars es la lista de compases.
+        //
+        //Cada bar tiene listas para cada cuerda: highE, B, G, D, A, lowE.
         val bar = bars[barIndex]
         val padded = fret.padStart(2, '-').padEnd(3, '-')
 

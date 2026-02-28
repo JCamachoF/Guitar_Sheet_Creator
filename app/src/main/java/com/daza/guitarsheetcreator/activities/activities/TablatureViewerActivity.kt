@@ -15,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.daza.guitarsheetcreator.R
-import com.daza.guitarsheetcreator.activities.adapters.TabBarAdapterEdit
+import com.daza.guitarsheetcreator.activities.adapters.TabBarEditorAdapter
 import com.daza.guitarsheetcreator.activities.adapters.TablatureRowAdapter
 import com.daza.guitarsheetcreator.activities.dataBase.AppDatabase
 import com.daza.guitarsheetcreator.activities.models.TablatureBar
@@ -30,7 +30,7 @@ class TablatureViewerActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var fab: ExtendedFloatingActionButton
-    private lateinit var adapter: TabBarAdapterEdit
+    private lateinit var adapter: TabBarEditorAdapter
     private lateinit var db: AppDatabase
 
     private lateinit var song: Song
@@ -49,7 +49,7 @@ class TablatureViewerActivity : AppCompatActivity() {
             insets
         }
 
-        recyclerView = findViewById(R.id.recyclerViewBars)
+        recyclerView = findViewById(R.id.recyclerViewBarsViwerActivity)
         fab= findViewById(R.id.floatingActionButtonPdf)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -183,65 +183,6 @@ class TablatureViewerActivity : AppCompatActivity() {
             }
         }
     }
-
-    /*private fun saveSongAsPdf(uri: Uri, song: Song) {
-        val bars = parseTablature(song.tablature)
-
-        val pdfDocument = PdfDocument()
-        val paint = Paint().apply {
-            textSize = 12f
-            typeface = Typeface.MONOSPACE
-        }
-
-        val pageWidth = 595
-        val pageHeight = 842
-        val lineHeight = 18
-        val marginLeft = 40f
-        val marginRight = 40f
-        val contentWidth = pageWidth - marginLeft - marginRight
-
-        // ✅ Ahora que paint y contentWidth existen, puedes usar measureText
-        val maxCharsPerLine = (contentWidth / paint.measureText("-")).toInt()
-        val lines = buildLinearTablature(bars, maxCharsPerLine)
-
-        var yPosition = 60
-        var currentPageNumber = 1
-
-        var page = pdfDocument.startPage(PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPageNumber).create())
-        val canvas = page.canvas
-
-        // Título
-        paint.textSize = 16f
-        canvas.drawText("Título: ${song.title}", marginLeft, yPosition.toFloat(), paint)
-        yPosition += 30
-        paint.textSize = 12f
-
-        for (line in lines) {
-            if (yPosition + lineHeight > pageHeight - 40) {
-                pdfDocument.finishPage(page)
-                currentPageNumber++
-                page = pdfDocument.startPage(PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPageNumber).create())
-                yPosition = 60
-            }
-            canvas.drawText(line, marginLeft, yPosition.toFloat(), paint)
-            yPosition += lineHeight
-        }
-
-        pdfDocument.finishPage(page)
-
-        try {
-            contentResolver.openOutputStream(uri)?.use { output ->
-                pdfDocument.writeTo(output)
-            }
-            Toast.makeText(this, "PDF guardado correctamente", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Error al guardar PDF", Toast.LENGTH_SHORT).show()
-        } finally {
-            pdfDocument.close()
-        }
-    }*/
-
 
     private fun saveSongAsPdf(uri: Uri, song: Song) {
         val bars = parseTablature(song.tablature)

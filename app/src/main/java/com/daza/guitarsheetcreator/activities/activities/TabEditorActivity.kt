@@ -20,6 +20,22 @@ import kotlinx.coroutines.withContext
 
 
 class TabEditorActivity : AppCompatActivity() {
+
+
+    /*TabEditorActivity – Coordinador principal
+
+    Esta activity no dibuja directamente la tablatura.
+    Su función es:
+
+    Crear los fragments
+
+    Conectarlos entre sí
+
+    Guardar en base de datos
+
+    Manejar Undo
+
+    Es el “director de orquesta”.*/
     private var songId: Int = -1
 
     // Fragmentos como propiedades para acceso en toda la actividad
@@ -36,8 +52,15 @@ class TabEditorActivity : AppCompatActivity() {
             insets
         }
 
+        //Si rota la pantalla → usa el estado guardado
+//✔ Si no → lo obtiene del intent
+
         songId = savedInstanceState?.getInt("song_id") ?: intent.getIntExtra("song_id", -1)
 
+
+        //Solo los crea si savedInstanceState == null.
+        //
+        //Esto evita duplicarlos cuando rota pantalla.
         if (savedInstanceState == null) {
 
             barsFragment = TabEditorBarsFragment.newInstance(songId)
@@ -48,11 +71,23 @@ class TabEditorActivity : AppCompatActivity() {
                 .replace(R.id.fragmentBarsContainer, barsFragment, "barsFragment")
                 .commit()
         } else {
+            //Si rota, los recupera por tag:
             barsFragment = supportFragmentManager.findFragmentByTag("barsFragment") as TabEditorBarsFragment
             controlsFragment = supportFragmentManager.findFragmentByTag("controlsFragment") as TabEditorControlsFragment
         }
 
         // 🔗 conecta listeners sin duplicar fragmentos
+        //Comunicación entre fragments
+        //
+        //Este es el punto más importante 👇
+        //
+        //La Activity actúa como puente:
+
+        //Aquí:
+        //
+        //Controls dice “añadir compás”
+        //
+        //Activity modifica BarsFragment
         controlsFragment.setOnAddBarListener {
             barsFragment.bars.add(TablatureBar())
             barsFragment.adapter.notifyItemInserted(barsFragment.bars.size - 1)
@@ -68,12 +103,15 @@ class TabEditorActivity : AppCompatActivity() {
     }
 
     private fun guardarTablatura() {
+        //Obtiene lista de compases
+        //Convierte a String con:
         val bars = barsFragment.bars
         val tablatureText = barsFragment.buildTabString(bars)
 
         lifecycleScope.launch(Dispatchers.IO) {
             val db = AppDatabase.getDatabase(this@TabEditorActivity)
-
+//Si songId == -1 → inserta nueva canción
+//Si no → actualiza existente
             if (songId == -1) {
                 // Aquí debes obtener los datos para la nueva canción (puedes pasar por intent o pedir al usuario)
                 val title = intent.getStringExtra("title") ?: "Sin título"
@@ -104,10 +142,10 @@ class TabEditorActivity : AppCompatActivity() {
         }
     }
 
-    fun showFretNumbers(barIndex: Int, string: String) {
-
-        controlsFragment.startFretSelection(barIndex, string) { selectedFret, selectedPosition ->
-
+    fun showFretNumbers(barIndex: Int, string: String, position1: Int) {
+        controlsFragment.startFretSelection(barIndex, string, position1) { selectedFret, selectedPosition ->
+//Cuando el usuario toca una cuerda en TabEditorBarsFragent se llama a
+            // controlsFragment.startFretSelection(...)
             if (selectedFret == "|") {
                 barsFragment.updateBarSeparatorAt(barIndex, selectedPosition)
             } else {
@@ -115,7 +153,7 @@ class TabEditorActivity : AppCompatActivity() {
                     barIndex,
                     string,
                     selectedFret,
-                    selectedPosition
+                    position1
                 )
             }
         }
