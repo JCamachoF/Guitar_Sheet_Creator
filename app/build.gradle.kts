@@ -14,8 +14,8 @@ android {
         applicationId = "com.daza.guitarsheetcreator"
         minSdk = 24
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 4
+        versionName = "2.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,16 +46,13 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.room.common.jvm)
-    implementation(libs.androidx.room.runtime.android)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Room
-    val room_version = "2.7.2"
-    implementation ("androidx.room:room-runtime:$room_version")
-    ksp ("androidx.room:room-compiler:$room_version")
+
 
 // Coroutines (para llamadas a base de datos)
             // implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

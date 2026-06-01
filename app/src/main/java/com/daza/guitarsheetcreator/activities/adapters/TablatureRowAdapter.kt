@@ -54,10 +54,22 @@ class TablatureRowAdapter(
 
                 for (note in notes) {
 
+                    /*val cell = TextView(container.context).apply {
+                        text = note
+                        textSize = 15f
+                        typeface = android.graphics.Typeface.MONOSPACE
+                        gravity = android.view.Gravity.CENTER
+                        includeFontPadding = false
+                    }*/
+
+
                     val cell = TextView(container.context).apply {
                         text = note
-                        textSize = 10f
-                        typeface = android.graphics.Typeface.MONOSPACE
+                        textSize = 15f
+                        typeface = android.graphics.Typeface.create(
+                            android.graphics.Typeface.MONOSPACE,
+                            android.graphics.Typeface.BOLD
+                        )
                         gravity = android.view.Gravity.CENTER
                         includeFontPadding = false
                     }

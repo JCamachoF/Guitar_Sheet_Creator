@@ -59,7 +59,7 @@ class TabBarEditorAdapter(
                 for ((pos, note) in notes.withIndex()) {
                     val cell = TextView(container.context).apply {
                         text = note
-                        typeface = Typeface.MONOSPACE
+                        typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
                         includeFontPadding = false
                         gravity = Gravity.CENTER
                         setPadding(0,0,0,0)
