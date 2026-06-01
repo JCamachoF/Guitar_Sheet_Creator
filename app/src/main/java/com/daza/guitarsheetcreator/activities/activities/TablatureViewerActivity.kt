@@ -209,7 +209,7 @@ class TablatureViewerActivity : AppCompatActivity() {
         var page = pdfDocument.startPage(
             PdfDocument.PageInfo.Builder(pageWidth, pageHeight, currentPageNumber).create()
         )
-        var canvas = page.canvas
+        var canvas = page.canvas  //cambiamos a variable
 
         // Dibujar título
         paint.textSize = 16f
