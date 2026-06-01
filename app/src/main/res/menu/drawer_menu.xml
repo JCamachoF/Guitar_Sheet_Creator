@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_backup"
+        android:title="Respaldar datos"
+        android:icon="@drawable/ic_save"/>
+
+    <item
+        android:id="@+id/nav_restore"
+        android:title="Restaurar datos"
+        android:icon="@drawable/ic_open"/>
+
+</menu>
