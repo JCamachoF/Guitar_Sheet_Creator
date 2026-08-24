@@ -6,16 +6,16 @@ plugins {
 
 android {
     namespace = "com.daza.guitarsheetcreator"
-    compileSdk = 35
+    compileSdk = 36
 
 
 
     defaultConfig {
         applicationId = "com.daza.guitarsheetcreator"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 4
-        versionName = "2.1.0"
+        targetSdk = 36
+        versionCode = 5
+        versionName = "2.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
